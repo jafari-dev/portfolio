@@ -4,8 +4,8 @@ import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { useLocale } from "next-intl";
 import { toPersianDigits } from "@/utils/locale";
-import { useLocale } from "@/providers/LocaleProvider";
 
 // Flat-top hexagon — text sits in the full-width vertical center band.
 const HEX = "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)";
@@ -122,7 +122,7 @@ const Y_SHIFT = 0.468;
 
 export default function Fun() {
   const t = useTranslations("fun");
-  const { locale } = useLocale();
+  const locale = useLocale();
   const locVal = (v: string) => locale === "fa" ? toPersianDigits(v) : v;
 
   return (

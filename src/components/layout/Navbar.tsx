@@ -3,16 +3,17 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Moon, Sun, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
-import { useLocale } from "@/providers/LocaleProvider";
+import { useRouter } from "next/navigation";
 
 const NAV_ITEMS = ["about", "skills", "experience", "projects", "fun", "contact"] as const;
 
 export default function Navbar() {
   const t = useTranslations("nav");
   const { theme, setTheme } = useTheme();
-  const { locale, setLocale } = useLocale();
+  const locale = useLocale();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -86,7 +87,7 @@ export default function Navbar() {
             {/* Language toggle */}
             {mounted && (
               <motion.button
-                onClick={() => setLocale(locale === "en" ? "fa" : "en")}
+                onClick={() => router.push(locale === "en" ? "/fa/" : "/en/")}
                 title={t("toggle_language")}
                 className="cursor-pointer rounded-lg px-2.5 py-1.5 font-bold font-mono text-slate-600 text-xs transition-all duration-200 hover:bg-neon-cyan/10 hover:text-neon-cyan dark:text-slate-400"
                 whileHover={{ scale: 1.1 }}

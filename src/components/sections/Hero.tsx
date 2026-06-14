@@ -3,10 +3,9 @@
 import { motion } from "framer-motion";
 import { ChevronDown, Download, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import NeonButton from "@/components/ui/NeonButton";
 import { toPersianDigits } from "@/utils/locale";
-import { useLocale } from "@/providers/LocaleProvider";
 
 const container = {
   hidden: { opacity: 0 },
@@ -24,7 +23,7 @@ const item = {
 
 export default function Hero() {
   const t = useTranslations("hero");
-  const { locale } = useLocale();
+  const locale = useLocale();
   const locDigits = (v: string) => locale === "fa" ? toPersianDigits(v) : v;
 
   return (

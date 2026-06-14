@@ -2,15 +2,14 @@
 
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
 import { socialLinks } from "@/data/portfolio";
 import { toPersianDigits } from "@/utils/locale";
-import { useLocale } from "@/providers/LocaleProvider";
 
 export default function Footer() {
   const t = useTranslations("footer");
-  const { locale } = useLocale();
+  const locale = useLocale();
 
   const socialItems = [
     { href: socialLinks.github, icon: <GitHubIcon size={18} />, label: t("github") },

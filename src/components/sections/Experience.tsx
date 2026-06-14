@@ -3,10 +3,9 @@
 import { motion } from "framer-motion";
 import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { experiences } from "@/data/portfolio";
-import { useLocale } from "@/providers/LocaleProvider";
 import { toPersianDigits } from "@/utils/locale";
 
 const colorMap = {
@@ -110,7 +109,7 @@ function formatDuration(start: Date, end: Date | null, yearLabel: string, monthL
 
 export default function Experience() {
   const t = useTranslations("experience");
-  const { locale } = useLocale();
+  const locale = useLocale();
 
   return (
     <section id="experience" className="relative py-24">
