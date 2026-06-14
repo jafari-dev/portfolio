@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { Inter, JetBrains_Mono, Space_Grotesk, Vazirmatn } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { LocaleProvider } from "@/providers/LocaleProvider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
+const vazirmatn = Vazirmatn({ subsets: ["arabic"], variable: "--font-vazirmatn" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jafari.dev"),
@@ -39,13 +39,18 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://jafari.dev" },
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const messages = await getMessages();
-  const fontVars = [inter.variable, spaceGrotesk.variable, jetbrainsMono.variable].join(" ");
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const fontVars = [inter.variable, spaceGrotesk.variable, jetbrainsMono.variable, vazirmatn.variable].join(" ");
 
   return (
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
+        {/* Pre-hydration locale script to prevent RTL flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var l=localStorage.getItem('locale');if(l==='fa'){document.documentElement.lang='fa';document.documentElement.dir='rtl';}}catch(e){}`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -66,9 +71,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className="text-slate-800 antialiased transition-colors duration-300 dark:text-slate-200">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <NextIntlClientProvider messages={messages} locale="en">
-            {children}
-          </NextIntlClientProvider>
+          <LocaleProvider>{children}</LocaleProvider>
         </ThemeProvider>
       </body>
     </html>

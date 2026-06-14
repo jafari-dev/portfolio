@@ -5,6 +5,8 @@ import { ChevronDown, Download, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import NeonButton from "@/components/ui/NeonButton";
+import { toPersianDigits } from "@/utils/locale";
+import { useLocale } from "@/providers/LocaleProvider";
 
 const container = {
   hidden: { opacity: 0 },
@@ -22,6 +24,8 @@ const item = {
 
 export default function Hero() {
   const t = useTranslations("hero");
+  const { locale } = useLocale();
+  const locDigits = (v: string) => locale === "fa" ? toPersianDigits(v) : v;
 
   return (
     <section id="hero" className="relative flex min-h-screen items-center overflow-hidden">
@@ -67,16 +71,16 @@ export default function Hero() {
               animate={{ y: [10, -10, 10] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <p className="text-center font-bold font-display text-2xl text-neon-cyan">15+</p>
-              <p className="text-center text-slate-600 text-xs dark:text-slate-400">Business Projects</p>
+              <p className="text-center font-bold font-display text-2xl text-neon-cyan">{locDigits(t("projects_count"))}</p>
+              <p className="text-center text-slate-600 text-xs dark:text-slate-400">{t("projects_label")}</p>
             </motion.div>
             <motion.div
               className="glass neon-border absolute -top-4 -right-4 rounded-xl px-4 py-2"
               animate={{ y: [-10, 10, -10] }}
               transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
-              <p className="text-center font-bold font-display text-2xl text-neon-purple">7+</p>
-              <p className="text-center text-slate-600 text-xs dark:text-slate-400">Years of Experience</p>
+              <p className="text-center font-bold font-display text-2xl text-neon-purple">{locDigits(t("years_count"))}</p>
+              <p className="text-center text-slate-600 text-xs dark:text-slate-400">{t("years_label")}</p>
             </motion.div>
           </motion.div>
           {/* Text content */}
@@ -97,7 +101,7 @@ export default function Hero() {
             <motion.div variants={item} className="text-center lg:text-left">
               <p className="mb-2 font-mono text-lg text-slate-600 dark:text-slate-400">{t("greeting")}</p>
               <h1 className="font-bold font-display text-5xl leading-tight sm:text-6xl lg:text-7xl">
-                <span className="gradient-text">Ahmad Jafari</span>
+                <span className="gradient-text">{t("name")}</span>
               </h1>
             </motion.div>
             {/* Title */}

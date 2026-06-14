@@ -58,6 +58,13 @@ const colorMap = {
   },
 };
 
+function projectKey(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, "_")
+    .replace(/[·\s]+/g, "_");
+}
+
 export default function Projects() {
   const t = useTranslations("projects");
 
@@ -71,6 +78,12 @@ export default function Projects() {
         <div className="space-y-10">
           {projects.map((project, i) => {
             const colors = colorMap[project.color];
+            const key = projectKey(project.name);
+            const localizedName = t(`entries.${key}.name` as Parameters<typeof t>[0]);
+            const description = t(`entries.${key}.description` as Parameters<typeof t>[0]);
+            const role = t(`entries.${key}.role` as Parameters<typeof t>[0]);
+            const highlights = t.raw(`entries.${key}.highlights` as Parameters<typeof t.raw>[0]) as Array<string>;
+
             return (
               <motion.article
                 key={project.name}
@@ -94,7 +107,7 @@ export default function Projects() {
                     <span className="h-3 w-3 rounded-full bg-green-400/70" />
                   </div>
                   <h3 className="truncate font-bold font-mono text-lg text-slate-900 dark:text-white">
-                    {project.name}
+                    {localizedName}
                   </h3>
                   <h5
                     className={`rounded-full border-2 px-2.5 py-1 font-bold font-mono text-xs uppercase tracking-wider ${colors.badge}`}
@@ -103,22 +116,24 @@ export default function Projects() {
                   </h5>
                 </div>
                 <div className="relative p-4 md:p-8">
-                  <h5 className={`mb-2 font-mono uppercase tracking-wider ${colors.text}`}>About the project</h5>
+                  <h5 className={`mb-2 font-mono uppercase tracking-wider ${colors.text}`}>{t("about_project")}</h5>
                   <p className="text-justify text-slate-600 text-sm leading-6 md:text-base dark:text-slate-400">
-                    {project.description}
+                    {description}
                   </p>
                   <hr className="my-6 border-slate-500/30" />
                   {/* Role */}
                   <div className="mt-6">
-                    <h5 className={`mb-2 font-mono uppercase tracking-wider ${colors.text}`}>Role</h5>
-                    <p className="text-slate-600 text-sm leading-6 dark:text-slate-400">{project.role}</p>
+                    <h5 className={`mb-2 font-mono uppercase tracking-wider ${colors.text}`}>{t("role_label")}</h5>
+                    <p className="text-slate-600 text-sm leading-6 dark:text-slate-400">{role}</p>
                   </div>
                   <hr className="my-6 border-slate-500/30" />
                   {/* Highlights */}
                   <div>
-                    <h5 className={`mb-2 font-mono uppercase tracking-wider ${colors.text}`}>Highlights</h5>
+                    <h5 className={`mb-2 font-mono uppercase tracking-wider ${colors.text}`}>
+                      {t("highlights_label")}
+                    </h5>
                     <ul className="mt-4 space-y-2">
-                      {project.highlights.map((highlight, j) => (
+                      {highlights.map((highlight, j) => (
                         <motion.li
                           key={j}
                           className="flex items-start gap-2 text-slate-600 text-sm leading-6 dark:text-slate-400"
@@ -138,7 +153,9 @@ export default function Projects() {
                   <hr className="my-6 border-slate-500/30" />
                   {/* Tech stack */}
                   <div>
-                    <h5 className={`mb-2 font-mono uppercase tracking-wider ${colors.text}`}>Tech Stack</h5>
+                    <h5 className={`mb-2 font-mono uppercase tracking-wider ${colors.text}`}>
+                      {t("tech_stack_label")}
+                    </h5>
                     <div className="flex flex-wrap gap-2">
                       {project.stack.map((tech) => {
                         const icon = skillIcons[tech];

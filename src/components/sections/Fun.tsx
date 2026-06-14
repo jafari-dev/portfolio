@@ -4,6 +4,8 @@ import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { toPersianDigits } from "@/utils/locale";
+import { useLocale } from "@/providers/LocaleProvider";
 
 // Flat-top hexagon — text sits in the full-width vertical center band.
 const HEX = "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)";
@@ -120,6 +122,8 @@ const Y_SHIFT = 0.468;
 
 export default function Fun() {
   const t = useTranslations("fun");
+  const { locale } = useLocale();
+  const locVal = (v: string) => locale === "fa" ? toPersianDigits(v) : v;
 
   return (
     <section id="fun" className="relative overflow-hidden py-24">
@@ -165,7 +169,7 @@ export default function Fun() {
                       <div
                         className={`pointer-events-none absolute top-1/2 left-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full ${spot} blur-2xl`}
                       />
-                      <p className={`relative font-bold font-display text-xl sm:text-2xl ${color}`}>{value}</p>
+                      <p className={`relative font-bold font-display text-xl sm:text-2xl ${color}`}>{locVal(value)}</p>
                       <p className="relative mt-1 whitespace-pre-line font-medium text-slate-700 text-xs sm:text-sm dark:text-slate-400">
                         {t(key).split(" ").join("\n")}
                       </p>

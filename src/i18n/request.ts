@@ -1,6 +1,2 @@
-import { getRequestConfig } from "next-intl/server";
-
-export default getRequestConfig(async () => ({
-  locale: "en",
-  messages: (await import("../messages/en.json")).default,
-}));
+// This file is kept as a placeholder; locale management is handled client-side via LocaleProvider.
+export {};

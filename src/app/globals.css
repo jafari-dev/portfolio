@@ -51,6 +51,14 @@ html:not(.dark) {
   --color-neon-yellow: #a16207;
 }
 
+/* Persian / RTL locale — override font stacks with Vazirmatn.
+   Must live OUTSIDE @layer so it beats @theme's unlayered :root variables. */
+html[dir="rtl"] {
+  --font-sans: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-vazirmatn), ui-monospace, monospace;
+}
+
 /* ─── Base ────────────────────────────────────────────────────────────── */
 @layer base {
   :root {

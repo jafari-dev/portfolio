@@ -98,7 +98,7 @@ export default function Skills() {
                 <h3
                   className={`mb-6 animate-pulse-glow text-center font-bold font-mono text-md uppercase tracking-wider ${colors.text}`}
                 >
-                  {category.title}
+                  {t(category.titleKey as Parameters<typeof t>[0])}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {category.skills.map((skill, skillIdx) => {

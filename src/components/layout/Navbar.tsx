@@ -5,12 +5,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { useLocale } from "@/providers/LocaleProvider";
 
 const NAV_ITEMS = ["about", "skills", "experience", "projects", "fun", "contact"] as const;
 
 export default function Navbar() {
   const t = useTranslations("nav");
   const { theme, setTheme } = useTheme();
+  const { locale, setLocale } = useLocale();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -81,6 +83,19 @@ export default function Navbar() {
 
           {/* Controls */}
           <div className="flex items-center gap-2">
+            {/* Language toggle */}
+            {mounted && (
+              <motion.button
+                onClick={() => setLocale(locale === "en" ? "fa" : "en")}
+                title={t("toggle_language")}
+                className="cursor-pointer rounded-lg px-2.5 py-1.5 font-bold font-mono text-slate-600 text-xs transition-all duration-200 hover:bg-neon-cyan/10 hover:text-neon-cyan dark:text-slate-400"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                {t("toggle_language")}
+              </motion.button>
+            )}
+
             {/* Theme toggle */}
             {mounted && (
               <motion.button

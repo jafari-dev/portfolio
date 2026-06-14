@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { experiences } from "@/data/portfolio";
+import { useLocale } from "@/providers/LocaleProvider";
+import { toPersianDigits } from "@/utils/locale";
 
 const colorMap = {
   cyan: {
@@ -73,23 +75,42 @@ const colorMap = {
   },
 };
 
-function formatDate(date: Date) {
+const employmentTypeKeys: Record<string, string> = {
+  "Full-time": "full_time",
+  "Part-time": "part_time",
+  Contract: "contract",
+};
+
+const locationTypeKeys: Record<string, string> = {
+  "On-site": "onsite",
+  Remote: "remote",
+  Hybrid: "hybrid",
+};
+
+function formatDate(date: Date, locale: string) {
+  if (locale === "fa") {
+    return date.toLocaleDateString("fa-IR", { month: "long", year: "numeric" });
+  }
   return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 }
 
-function formatDuration(start: Date, end: Date | null): string {
+function formatDuration(start: Date, end: Date | null, yearLabel: string, monthLabel: string, locale: string): string {
   const to = end ?? new Date();
   const months = (to.getFullYear() - start.getFullYear()) * 12 + (to.getMonth() - start.getMonth());
+  let result: string;
   if (months < 12) {
-    return `${months} mo`;
+    result = `${months} ${monthLabel}`;
+  } else {
+    const years = Math.floor(months / 12);
+    const rem = months % 12;
+    result = rem > 0 ? `${years} ${yearLabel} ${rem} ${monthLabel}` : `${years} ${yearLabel}`;
   }
-  const years = Math.floor(months / 12);
-  const rem = months % 12;
-  return rem > 0 ? `${years} yr ${rem} mo` : `${years} yr`;
+  return locale === "fa" ? toPersianDigits(result) : result;
 }
 
 export default function Experience() {
   const t = useTranslations("experience");
+  const { locale } = useLocale();
 
   return (
     <section id="experience" className="relative py-24">
@@ -103,6 +124,13 @@ export default function Experience() {
           <div className="space-y-8">
             {experiences.map((exp, i) => {
               const colors = colorMap[exp.color];
+              const company = t(`entries.${exp.id}.company` as Parameters<typeof t>[0]);
+              const location = t(`entries.${exp.id}.location` as Parameters<typeof t>[0]);
+              const role = t(`entries.${exp.id}.role` as Parameters<typeof t>[0]);
+              const highlights = t.raw(`entries.${exp.id}.highlights` as Parameters<typeof t.raw>[0]) as Array<string>;
+              const empTypeKey = employmentTypeKeys[exp.employmentType] as Parameters<typeof t>[0];
+              const locTypeKey = locationTypeKeys[exp.locationType] as Parameters<typeof t>[0];
+
               return (
                 <motion.div
                   key={exp.id}
@@ -127,12 +155,12 @@ export default function Experience() {
                     <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="font-bold font-display text-lg text-slate-900 dark:text-white">{exp.role}</h3>
+                          <h3 className="font-bold font-display text-lg text-slate-900 dark:text-white">{role}</h3>
                         </div>
                         <div className="mt-1 flex items-center gap-2">
-                          <span className={`font-semibold ${colors.bullet}`}>{exp.company}</span>
+                          <span className={`font-semibold ${colors.bullet}`}>{company}</span>
                           <span className={`rounded-full border px-2 py-0.5 text-xs ${colors.badge}`}>
-                            {exp.employmentType}
+                            {t(empTypeKey)}
                           </span>
                         </div>
                       </div>
@@ -151,21 +179,21 @@ export default function Experience() {
                     <div className="mb-4 flex flex-col gap-2 text-slate-600 text-sm dark:text-slate-500">
                       <div className="flex flex-wrap items-center gap-1">
                         <Calendar size={13} />
-                        {formatDate(exp.start)} — {exp.end ? formatDate(exp.end) : t("present")}
+                        {formatDate(exp.start, locale)} — {exp.end ? formatDate(exp.end, locale) : t("present")}
                         <span className="rounded-full border border-slate-300/50 bg-slate-100/60 px-2 py-0.5 text-slate-500 text-xs backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
-                          {formatDuration(exp.start, exp.end)}
+                          {formatDuration(exp.start, exp.end, t("duration_year"), t("duration_month"), locale)}
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
                         <MapPin size={13} />
-                        {exp.location}
+                        {location}
                         <span className="rounded-full border border-slate-300/50 bg-slate-100/60 px-2 py-0.5 text-slate-500 text-xs backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
-                          {exp.locationType}
+                          {t(locTypeKey)}
                         </span>
                       </div>
                     </div>
                     <ul className="space-y-2">
-                      {exp.highlights.map((highlight, j) => (
+                      {highlights.map((highlight, j) => (
                         <motion.li
                           key={j}
                           className="flex items-start gap-2 text-slate-600 text-sm leading-6 dark:text-slate-400"
