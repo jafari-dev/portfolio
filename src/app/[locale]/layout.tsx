@@ -14,11 +14,7 @@ const vazirmatn = Vazirmatn({ subsets: ["arabic"], variable: "--font-vazirmatn" 
 
 const BASE_URL = "https://jafari.dev";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const isFa = locale === "fa";
 
@@ -40,9 +36,7 @@ export async function generateMetadata({
       locale: isFa ? "fa_IR" : "en_US",
       url: `${BASE_URL}/${locale}/`,
       siteName: "Ahmad Jafari",
-      title: isFa
-        ? "احمد جعفری – مهندس ارشد فرانت‌اند"
-        : "Ahmad Jafari – Senior Front-end Engineer",
+      title: isFa ? "احمد جعفری – مهندس ارشد فرانت‌اند" : "Ahmad Jafari – Senior Front-end Engineer",
       description: isFa
         ? "مهندس فرانت‌اند با بیش از ۷ سال تجربه در ساخت اپلیکیشن‌های وب با کارایی بالا."
         : "Front-end Engineer with 7+ years building high-performance web apps.",
@@ -50,9 +44,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: isFa
-        ? "احمد جعفری – مهندس ارشد فرانت‌اند"
-        : "Ahmad Jafari – Senior Front-end Engineer",
+      title: isFa ? "احمد جعفری – مهندس ارشد فرانت‌اند" : "Ahmad Jafari – Senior Front-end Engineer",
       description: isFa
         ? "مهندس فرانت‌اند · React · Next.js · TypeScript"
         : "Front-end Engineer · React · Next.js · TypeScript",
@@ -83,7 +75,7 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
 
-  if (!(routing.locales as readonly string[]).includes(locale)) {
+  if (!(routing.locales as unknown as Array<string>).includes(locale)) {
     notFound();
   }
 
@@ -91,16 +83,11 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
   const dir = locale === "fa" ? "rtl" : "ltr";
-  const fontVars = [
-    inter.variable,
-    spaceGrotesk.variable,
-    jetbrainsMono.variable,
-    vazirmatn.variable,
-  ].join(" ");
+  const fontVars = [inter.variable, spaceGrotesk.variable, jetbrainsMono.variable, vazirmatn.variable].join(" ");
 
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning className={fontVars}>
-      <head>
+      <body className="text-slate-800 antialiased transition-colors duration-300 dark:text-slate-200">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -112,10 +99,7 @@ export default async function LocaleLayout({
               image: `${BASE_URL}/avatar.jpg`,
               jobTitle: "Senior Front-end Engineer",
               worksFor: { "@type": "Organization", name: "Partnerz" },
-              sameAs: [
-                "https://github.com/jafari-dev",
-                "https://www.linkedin.com/in/jafari-dev/",
-              ],
+              sameAs: ["https://github.com/jafari-dev", "https://www.linkedin.com/in/jafari-dev/"],
               email: "a99jafari@gmail.com",
               address: {
                 "@type": "PostalAddress",
@@ -125,8 +109,6 @@ export default async function LocaleLayout({
             }),
           }}
         />
-      </head>
-      <body className="text-slate-800 antialiased transition-colors duration-300 dark:text-slate-200">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <NextIntlClientProvider messages={messages} locale={locale}>
             {children}

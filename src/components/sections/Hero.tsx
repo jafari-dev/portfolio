@@ -24,7 +24,7 @@ const item = {
 export default function Hero() {
   const t = useTranslations("hero");
   const locale = useLocale();
-  const locDigits = (v: string) => locale === "fa" ? toPersianDigits(v) : v;
+  const locDigits = (v: string) => (locale === "fa" ? toPersianDigits(v) : v);
 
   return (
     <section id="hero" className="relative flex min-h-screen items-center overflow-hidden">
@@ -70,7 +70,9 @@ export default function Hero() {
               animate={{ y: [10, -10, 10] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <p className="text-center font-bold font-display text-2xl text-neon-cyan">{locDigits(t("projects_count"))}</p>
+              <p className="text-center font-bold font-display text-2xl text-neon-cyan">
+                {locDigits(t("projects_count"))}
+              </p>
               <p className="text-center text-slate-600 text-xs dark:text-slate-400">{t("projects_label")}</p>
             </motion.div>
             <motion.div
@@ -78,7 +80,9 @@ export default function Hero() {
               animate={{ y: [-10, 10, -10] }}
               transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
-              <p className="text-center font-bold font-display text-2xl text-neon-purple">{locDigits(t("years_count"))}</p>
+              <p className="text-center font-bold font-display text-2xl text-neon-purple">
+                {locDigits(t("years_count"))}
+              </p>
               <p className="text-center text-slate-600 text-xs dark:text-slate-400">{t("years_label")}</p>
             </motion.div>
           </motion.div>
@@ -96,9 +100,8 @@ export default function Hero() {
                 {t("available")}
               </span>
             </motion.div>
-            {/* Greeting + Name */}
+            {/* Name */}
             <motion.div variants={item} className="text-center lg:text-left">
-              <p className="mb-2 font-mono text-lg text-slate-600 dark:text-slate-400">{t("greeting")}</p>
               <h1 className="font-bold font-display text-5xl leading-tight sm:text-6xl lg:text-7xl">
                 <span className="gradient-text">{t("name")}</span>
               </h1>
@@ -113,20 +116,19 @@ export default function Hero() {
             {/* Subtitle */}
             <motion.p
               variants={item}
-              className="max-w-xl text-center text-base text-slate-600 leading-relaxed sm:text-lg lg:text-left dark:text-slate-400"
+              className="max-w-xl text-center text-base text-slate-600 leading-relaxed sm:text-lg lg:text-start dark:text-slate-400"
             >
               {t("subtitle")}
             </motion.p>
             {/* CTA Buttons */}
             <motion.div variants={item} className="flex flex-wrap justify-center gap-4 lg:justify-start">
-              <NeonButton href="/AhmadJafari.pdf" download variant="primary" size="lg">
+              <NeonButton href="/AhmadJafari.pdf" download variant="primary">
                 <Download size={18} />
                 {t("cta_cv")}
               </NeonButton>
               <NeonButton
                 onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
                 variant="ghost"
-                size="lg"
               >
                 <MessageCircleMore size={18} />
                 {t("cta_contact")}

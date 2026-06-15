@@ -12,7 +12,6 @@
   },
   "hero": {
     "name": "Ahmad Jafari",
-    "greeting": "Hello, I'm",
     "title": "Software Engineer",
     "subtitle": "I craft fast, scalable web applications — turning complex problems into clean, reliable products people enjoy using.",
     "cta_cv": "Download CV",
